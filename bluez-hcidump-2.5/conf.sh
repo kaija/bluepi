@@ -1,0 +1,2 @@
+export LIBS=-lm
+./configure
