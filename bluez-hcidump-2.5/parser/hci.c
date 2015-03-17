@@ -32,6 +32,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "parser/parser.h"
 #include "lib/hci.h"
@@ -3574,6 +3575,11 @@ static inline void evt_le_conn_complete_dump(int level, struct frame *frm)
 	printf("bdaddr %s (%s)\n", addr, bdaddrtype2str(evt->peer_bdaddr_type));
 }
 
+static inline double le_rssi_distance(int rssi, int txPower)
+{
+	return pow(10, ((double) txPower - rssi) / (10 * 2)) / 1000;
+}
+
 static inline void evt_le_advertising_report_dump(int level, struct frame *frm)
 {
 	uint8_t num_reports = get_u8(frm);
@@ -3606,6 +3612,7 @@ static inline void evt_le_advertising_report_dump(int level, struct frame *frm)
 
 		p_indent(level, frm);
 		printf("RSSI: %d\n", ((int8_t *) frm->ptr)[frm->len - 1]);
+                printf("Distance: %0fmm\n", le_rssi_distance((((int8_t *) frm->ptr)[frm->len - 1]), 4));
 
 		frm->ptr += RSSI_SIZE;
 		frm->len -= RSSI_SIZE;
