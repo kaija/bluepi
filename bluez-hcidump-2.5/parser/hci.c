@@ -3577,7 +3577,8 @@ static inline void evt_le_conn_complete_dump(int level, struct frame *frm)
 
 static inline double le_rssi_distance(int rssi, int txPower)
 {
-	return pow(10, ((double) txPower - rssi) / (10 * 2)) / 1000;
+	//return pow(10, ((double) txPower - rssi) / (10 * 2)) / 1000;
+	return 0;
 }
 
 static inline void evt_le_advertising_report_dump(int level, struct frame *frm)
