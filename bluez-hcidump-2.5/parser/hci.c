@@ -3612,7 +3612,7 @@ static inline void evt_le_advertising_report_dump(int level, struct frame *frm)
 
 		p_indent(level, frm);
 		printf("RSSI: %d\n", ((int8_t *) frm->ptr)[frm->len - 1]);
-                printf("Distance: %0fmm\n", le_rssi_distance((((int8_t *) frm->ptr)[frm->len - 1]), 4));
+		printf("Distance: %0fmm\n", le_rssi_distance((((int8_t *) frm->ptr)[frm->len - 1]), 4));
 
 		frm->ptr += RSSI_SIZE;
 		frm->len -= RSSI_SIZE;
