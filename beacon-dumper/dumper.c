@@ -2,6 +2,45 @@
 #include "dumper.h"
 #include "log.h"
 
+void beacon_raw_dump(unsigned char *data, int len)
+{
+	//filter beacon
+	if(len != 69) return;
+	int i = 0;
+//#ifdef DUMPALL
+#if 0
+	for(i = 0; i< len; i++){
+		if((i+1)%16 == 1){
+			printf("\n");
+		}
+		printf("%02X ", data[i]);
+	}
+#else
+	printf("UUID:");
+	for(i=0; i<16; i++){
+		printf("%02X ", data[i+47]);
+	}
+	printf("  Signal %d", data[68]);
+	printf("\n");
+#endif
+	fflush(stdout);
+}
+
+
+int beacon_filter(unsigned char *data, int len)
+{
+	int i = 0;
+	unsigned char uuid[16];
+	char rssi;
+	if(len == 69){
+		for(i=0; i<16; i++){
+			uuid[i] = data[i+47];
+		}
+		rssi = data[68];
+		printf("RSSI %d\n",rssi );
+	}
+}
+
 void beacon_socket_close(int sk)
 {
 	if(sk > 0) close(sk);
@@ -93,7 +132,8 @@ int run()
 				char buf[2048];
 				int len = recv(sk, buf, 2048, 0);
 				if(len > 0){
-					LOG_DEBUG("Get %d byte from socket\n", len);
+					//LOG_DEBUG("Get %d byte from socket\n", len);
+					beacon_raw_dump(buf, len);
 				}else{
 					beacon_socket_close(sk);
 					start = 0;
